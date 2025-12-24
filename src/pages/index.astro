@@ -1,83 +1,10 @@
 ---
-import { exportJWK, exportPKCS8, generateKeyPair } from "jose";
 import MainLayout from "~/layouts/layout-main.astro";
-import {
-	Card,
-	CardAction,
-	CardContent,
-	CardDescription,
-	CardFooter,
-	CardHeader,
-	CardTitle,
-} from "~/components/ui/card";
-import { Button } from "~/components/ui/button";
-
-const keys = await generateKeyPair("RS256", {
-	extractable: true,
-});
-const privateKey = (await exportPKCS8(keys.privateKey))
-	.replace(/\s/g, "")
-	.trim();
-const publicKey = await exportJWK(keys.publicKey);
-const jwks = JSON.stringify({ keys: [{ use: "sig", ...publicKey }] })
-	.replace(/\s/g, "")
-	.trim();
+import GenerateKeys from "~/components/generate-keys.tsx";
 ---
 
 <MainLayout>
 	<main class="container space-y-8 my-12">
-		<!-- Private Key Section -->
-		<Card>
-			<CardHeader>
-				<CardTitle>JWT Private Key</CardTitle>
-				<CardDescription>
-					This private key is used to sign your JWTs. Keep it secure and never
-					share it.
-				</CardDescription>
-				<CardAction>
-					<Button id="copy-private">Copy</Button>
-				</CardAction>
-			</CardHeader>
-			<CardContent>
-				<pre
-					class="overflow-x-auto p-4 max-h-64 rounded-lg bg-muted font-mono text-sm leading-none wrap-break-word whitespace-pre-wrap">
-					<code id="private-key">
-						{privateKey}
-					</code>
-				</pre>
-			</CardContent>
-		</Card>
-
-		<!-- JWKS Section -->
-		<Card>
-			<CardHeader>
-				<CardTitle>JWKS (JSON Web Key Set)</CardTitle>
-				<CardDescription>
-					This JWKS contains your public key for verifying JWT signatures. Share
-					it with clients.
-				</CardDescription>
-				<CardAction>
-					<Button id="copy-jwks">Copy</Button>
-				</CardAction>
-			</CardHeader>
-			<CardContent>
-				<pre
-					class="overflow-x-auto p-4 max-h-64 rounded-lg bg-muted font-mono text-sm leading-none wrap-break-word whitespace-pre-wrap">
-				<code id="jwks-code">
-					{jwks}
-				</code>
-			</pre>
-			</CardContent>
-		</Card>
+		<GenerateKeys client:load />
 	</main>
-	<script>
-		document.getElementById("copy-private")?.addEventListener("click", () => {
-			const text = document.getElementById("private-key")?.textContent.trim();
-			if (text) navigator.clipboard.writeText(text);
-		});
-		document.getElementById("copy-jwks")?.addEventListener("click", () => {
-			const text = document.getElementById("jwks-code")?.textContent.trim();
-			if (text) navigator.clipboard.writeText(text);
-		});
-	</script>
 </MainLayout>
