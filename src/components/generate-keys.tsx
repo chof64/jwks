@@ -5,7 +5,6 @@ import {
 	CardAction,
 	CardContent,
 	CardDescription,
-	CardFooter,
 	CardHeader,
 	CardTitle,
 } from "~/components/ui/card";
@@ -42,7 +41,7 @@ export default function GenerateKeys() {
   };
 
   return (
-    <>
+    <div className='space-y-8'>
       {/* Private Key Section */}
       <Card>
         <CardHeader>
@@ -56,7 +55,7 @@ export default function GenerateKeys() {
           </CardAction>
         </CardHeader>
         <CardContent>
-          <pre className="overflow-x-auto p-4 max-h-64 rounded-lg bg-muted font-mono text-sm leading-none wrap-break-word whitespace-pre-wrap">
+          <pre className="overflow-x-auto p-4 h-64 rounded-lg bg-muted font-mono text-sm leading-none wrap-break-word whitespace-pre-wrap">
             <code>{privateKey}</code>
           </pre>
         </CardContent>
@@ -75,11 +74,11 @@ export default function GenerateKeys() {
           </CardAction>
         </CardHeader>
         <CardContent>
-          <pre className="overflow-x-auto p-4 max-h-64 rounded-lg bg-muted font-mono text-sm leading-none wrap-break-word whitespace-pre-wrap">
+          <pre className="overflow-x-auto p-4 h-64 rounded-lg bg-muted font-mono text-sm leading-none wrap-break-word whitespace-pre-wrap">
             <code>{jwks}</code>
           </pre>
         </CardContent>
       </Card>
-    </>
+    </div>
   );
 }
