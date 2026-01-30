@@ -20,12 +20,11 @@ export default function GenerateKeys() {
         extractable: true,
       });
       const privKey = (await exportPKCS8(keys.privateKey))
-        .replace(/\s/g, "")
-        .trim();
+        .trimEnd()
+        .replace(/\n/g, " "); // Always single-line like original script
       const pubKey = await exportJWK(keys.publicKey);
-      const jwksData = JSON.stringify({ keys: [{ use: "sig", ...pubKey }] })
-        .replace(/\s/g, "")
-        .trim();
+      const jwksData = JSON.stringify({ keys: [{ use: "sig", ...pubKey }] }); // Always compact
+      
       setPrivateKey(privKey);
       setJwks(jwksData);
     };
