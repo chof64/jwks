@@ -6,7 +6,7 @@ A static, client-side collection of developer tools that run directly in the bro
 
 - **Client-Side Only**: All processing happens in your browser, ensuring your data never leaves your device.
 - **JWT Key Generation**: Generates keys compatible with Convex Auth setup for secure authentication.
-- **Base64 Encoder/Decoder**: Encode and decode text to and from Base64 (UTF-8 safe).
+- **Base64 Encoder/Decoder**: Encode and decode text or files to and from Base64 (UTF-8 safe, files handled locally in the browser).
 - **Simple UI**: Clean, focused interface for each tool.
 - **No Installation Required**: Access directly via the hosted version – no dependencies to install.
 - **Privacy-Focused**: Static site with no server-side processing or data collection.
@@ -30,6 +30,11 @@ The underlying process uses the `jose` library to:
 ### Base64 Encoder/Decoder
 
 Encode text into Base64 or decode Base64 back into text. Uses the `TextEncoder`/`TextDecoder` APIs, so non-ASCII characters (accented letters, emoji, etc.) are handled correctly.
+
+You can also convert files:
+
+- **Encode a file**: Pick any file — it is read locally and converted to a Base64 string you can copy or download as a `.b64` file.
+- **Decode to a file**: Paste Base64 (or load a `.b64`/`.txt` file), optionally adjust the output file name, and download the decoded file. The file type (e.g. image, PDF, ZIP) is auto-detected from the binary signature so the output is saved with a sensible extension.
 
 ## Usage
 
