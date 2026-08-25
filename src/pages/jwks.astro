@@ -1,0 +1,10 @@
+---
+import MainLayout from "~/layouts/layout-main.astro";
+import GenerateKeys from "~/components/generate-keys.tsx";
+---
+
+<MainLayout title="JWKS Generator | Dev Tools">
+	<main class="container min-h-[calc(100vh-3rem)] space-y-8 py-8">
+		<GenerateKeys client:load />
+	</main>
+</MainLayout>

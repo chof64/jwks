@@ -1,10 +1,10 @@
 ---
 import MainLayout from "~/layouts/layout-main.astro";
-import GenerateKeys from "~/components/generate-keys.tsx";
+import ToolPicker from "~/components/tool-picker.astro";
 ---
 
 <MainLayout>
-	<main class="container min-h-[calc(100vh-3rem)] space-y-8 py-8">
-		<GenerateKeys client:load />
+	<main class="container min-h-[calc(100vh-3rem)] flex flex-col items-center justify-center gap-6 py-8">
+		<ToolPicker />
 	</main>
 </MainLayout>
