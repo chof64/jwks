@@ -8,6 +8,7 @@ import {
 	CardTitle,
 } from "~/components/ui/card";
 import { Button } from "~/components/ui/button";
+import { cn } from "~/lib/utils";
 
 type Mode = "encode" | "decode";
 type InputType = "text" | "file";
@@ -49,6 +50,66 @@ function formatBytes(bytes: number): string {
 	if (bytes < 1024) return `${bytes} B`;
 	if (bytes < 1024 * 1024) return `${(bytes / 1024).toFixed(1)} KB`;
 	return `${(bytes / (1024 * 1024)).toFixed(1)} MB`;
+}
+
+function DropZone({
+	onFile,
+	label,
+	className,
+}: {
+	onFile: (file: File) => void;
+	label: string;
+	className?: string;
+}) {
+	const [dragging, setDragging] = useState(false);
+	const inputRef = useRef<HTMLInputElement>(null);
+
+	return (
+		<div
+			role="button"
+			tabIndex={0}
+			onClick={() => inputRef.current?.click()}
+			onKeyDown={(e) => {
+				if (e.key === "Enter" || e.key === " ") {
+					e.preventDefault();
+					inputRef.current?.click();
+				}
+			}}
+			onDragOver={(e) => {
+				e.preventDefault();
+				setDragging(true);
+			}}
+			onDragLeave={() => setDragging(false)}
+			onDrop={(e) => {
+				e.preventDefault();
+				setDragging(false);
+				const file = e.dataTransfer.files?.[0];
+				if (file) onFile(file);
+			}}
+			className={cn(
+				"flex cursor-pointer flex-col items-center justify-center gap-1 rounded-lg border-2 border-dashed px-4 py-8 text-center transition-colors outline-none focus-visible:ring-2 focus-visible:ring-ring/50",
+				dragging
+					? "border-primary bg-primary/5"
+					: "border-border bg-muted/50 hover:border-primary/50 hover:bg-muted",
+				className
+			)}
+		>
+			<input
+				ref={inputRef}
+				type="file"
+				hidden
+				onChange={(e) => {
+					const file = e.target.files?.[0];
+					if (file) onFile(file);
+					e.target.value = "";
+				}}
+			/>
+			<p className="text-sm font-medium">{label}</p>
+			<p className="text-xs text-muted-foreground">
+				or click to browse
+			</p>
+		</div>
+	);
 }
 
 function detectFileSignature(
@@ -129,31 +190,27 @@ function FileEncodePanel() {
 
 	return (
 		<div className="space-y-4">
-			<div className="flex items-center gap-3">
-				<input
-					ref={inputRef}
-					type="file"
-					hidden
-					onChange={(e) => {
-						handleFile(e.target.files?.[0] ?? null);
-						e.target.value = "";
-					}}
-				/>
-				<Button
-					variant="outline"
-					onClick={() => inputRef.current?.click()}
-				>
-					{file ? "Choose another file" : "Choose a file"}
-				</Button>
-				{file && (
+			<DropZone
+				onFile={handleFile}
+				label={file ? "Drop a file to replace" : "Drop a file here"}
+			/>
+			{file && (
+				<div className="flex items-center gap-3">
 					<div className="min-w-0">
 						<p className="truncate text-sm font-medium">{file.name}</p>
 						<p className="text-xs text-muted-foreground">
 							{formatBytes(file.size)}
 						</p>
 					</div>
-				)}
-			</div>
+					<Button
+						variant="outline"
+						size="sm"
+						onClick={() => inputRef.current?.click()}
+					>
+						Choose another file
+					</Button>
+				</div>
+			)}
 			{loading && <p className="text-sm text-muted-foreground">Encoding…</p>}
 			{error && <p className="text-sm text-destructive">{error}</p>}
 			{output && (
@@ -200,7 +257,6 @@ function FileDecodePanel() {
 	const [fileName, setFileName] = useState("decoded");
 	const [error, setError] = useState("");
 	const [saved, setSaved] = useState<{ name: string; size: number } | null>(null);
-	const inputRef = useRef<HTMLInputElement>(null);
 
 	const detected = (() => {
 		try {
@@ -249,23 +305,10 @@ function FileDecodePanel() {
 
 	return (
 		<div className="space-y-4">
-			<div className="flex items-center gap-3">
-				<input
-					ref={inputRef}
-					type="file"
-					hidden
-					onChange={(e) => {
-						handleLoadFile(e.target.files?.[0] ?? null);
-						e.target.value = "";
-					}}
-				/>
-				<Button
-					variant="outline"
-					onClick={() => inputRef.current?.click()}
-				>
-					Load base64 from file
-				</Button>
-			</div>
+			<DropZone
+				onFile={handleLoadFile}
+				label="Drop a .b64 / .txt file here"
+			/>
 			<textarea
 				value={base64}
 				onChange={(e) => {
