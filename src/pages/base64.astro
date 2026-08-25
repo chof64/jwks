@@ -1,0 +1,10 @@
+---
+import MainLayout from "~/layouts/layout-main.astro";
+import Base64Tool from "~/components/base64-tool.tsx";
+---
+
+<MainLayout title="Base64 Encoder / Decoder | Dev Tools">
+	<main class="container min-h-[calc(100vh-3rem)] space-y-8 py-8">
+		<Base64Tool client:load />
+	</main>
+</MainLayout>
