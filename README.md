@@ -1,22 +1,25 @@
-# jwks
+# tools
 
-A static, client-side web application for generating JWT (JSON Web Token) private keys and JWKS (JSON Web Key Sets) directly in the browser. This tool provides a user-friendly interface to the manual key generation process described in Convex Auth documentation, enhancing privacy and security by performing all computations locally without sending data to external servers.
+A static, client-side collection of developer tools that run directly in the browser. Everything is computed locally — nothing leaves your device.
 
 ## Features
 
-- **Client-Side Generation**: All key generation happens in your browser, ensuring your private keys never leave your device.
-- **Convex Auth Integration**: Generates keys compatible with Convex Auth setup for secure authentication.
-- **Simple UI**: Web-based interface for the `generateKeys.mjs` script from Convex Labs.
+- **Client-Side Only**: All processing happens in your browser, ensuring your data never leaves your device.
+- **JWT Key Generation**: Generates keys compatible with Convex Auth setup for secure authentication.
+- **Base64 Encoder/Decoder**: Encode and decode text to and from Base64 (UTF-8 safe).
+- **Simple UI**: Clean, focused interface for each tool.
 - **No Installation Required**: Access directly via the hosted version – no dependencies to install.
 - **Privacy-Focused**: Static site with no server-side processing or data collection.
 
 ## Live Demo
 
-Try it out at: [https://chof64.github.io/jwks](https://chof64.github.io/jwks)
+Try it out at: [https://chof64.github.io/tools](https://chof64.github.io/tools)
 
-## How It Works
+## Tools
 
-This application wraps the key generation logic from [Convex Auth's manual setup guide](https://labs.convex.dev/auth/setup/manual). Instead of running the Node.js script locally, you can use the web interface to generate the required `JWT_PRIVATE_KEY` and `JWKS` values for your Convex deployment.
+### JWKS Generator
+
+Generates a JWT private key and matching JWKS (JSON Web Key Set) for your Convex deployment. This wraps the key generation logic from [Convex Auth's manual setup guide](https://labs.convex.dev/auth/setup/manual).
 
 The underlying process uses the `jose` library to:
 1. Generate an RSA key pair (RS256 algorithm).
@@ -24,15 +27,22 @@ The underlying process uses the `jose` library to:
 3. Create a JWKS with the public key.
 4. Output the values for copying into your Convex environment variables.
 
-All operations are performed client-side using JavaScript crypto APIs and the `jose` library, ensuring your keys remain private.
+### Base64 Encoder/Decoder
+
+Encode text into Base64 or decode Base64 back into text. Uses the `TextEncoder`/`TextDecoder` APIs, so non-ASCII characters (accented letters, emoji, etc.) are handled correctly.
 
 ## Usage
 
-1. Visit the live demo: [https://chof64.github.io/jwks](https://chof64.github.io/jwks)
-2. Click "Generate Keys" to create a new JWT private key and JWKS.
-3. Copy the generated `JWT_PRIVATE_KEY` and `JWKS` values.
-4. Paste them into your Convex deployment's [Environment Variables](https://dashboard.convex.dev/deployment/settings/environment-variables) page.
-5. Follow the remaining steps in the [Convex Auth setup guide](https://labs.convex.dev/auth/setup/manual).
+1. Visit the live demo: [https://chof64.github.io/tools](https://chof64.github.io/tools)
+2. Choose a tool from the navigation.
+3. Follow the on-screen instructions for the selected tool.
+
+### JWKS Generator
+
+1. Click "Generate Keys" to create a new JWT private key and JWKS.
+2. Copy the generated `JWT_PRIVATE_KEY` and `JWKS` values.
+3. Paste them into your Convex deployment's [Environment Variables](https://dashboard.convex.dev/deployment/settings/environment-variables) page.
+4. Follow the remaining steps in the [Convex Auth setup guide](https://labs.convex.dev/auth/setup/manual).
 
 ## Privacy & Security
 
